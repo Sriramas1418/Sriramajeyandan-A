@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Name — Graphic Designer</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --ink: #1A1410;
+    --rust: #C84B2F;
+    --gold: #D4A843;
+    --muted: #8C7B6B;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom Cursor */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--rust);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.15s ease, background 0.2s;
+    transform: translate(-50%, -50%);
+  }
+  .cursor-ring {
+    width: 40px; height: 40px;
+    border: 1.5px solid var(--rust);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.3s ease;
+    opacity: 0.6;
+  }
+  body:hover .cursor { opacity: 1; }
+
+  /* Noise Texture Overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 3rem;
+    mix-blend-mode: multiply;
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0;
+    width: 0; height: 1px;
+    background: var(--rust);
+    transition: width 0.3s ease;
+  }
+  .nav-links a:hover::after { width: 100%; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8rem 3rem 4rem 3rem;
+    position: relative;
+    z-index: 2;
+  }
+  .hero-tag {
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.3s forwards;
+  }
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(5rem, 9vw, 9rem);
+    line-height: 0.92;
+    letter-spacing: 0.02em;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.5s forwards;
+  }
+  .hero-title em {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    color: var(--rust);
+  }
+  .hero-sub {
+    margin-top: 2rem;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--muted);
+    max-width: 380px;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.7s forwards;
+  }
+  .hero-cta {
+    margin-top: 3rem;
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.9s forwards;
+  }
+  .btn-primary {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 0.9rem 2.2rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.3s, transform 0.2s;
+  }
+  .btn-primary:hover { background: var(--rust); transform: translateY(-2px); }
+  .btn-ghost {
+    font-size: 0.8rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.2s;
+  }
+  .btn-ghost:hover { color: var(--rust); }
+  .btn-ghost span { font-size: 1.2rem; transition: transform 0.2s; }
+  .btn-ghost:hover span { transform: translateX(4px); }
+
+  .hero-right {
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-img-wrap {
+    position: absolute;
+    inset: 0;
+    background: var(--ink);
+    clip-path: polygon(10% 0%, 100% 0%, 100% 100%, 0% 100%);
+    opacity: 0;
+    animation: fadeIn 1.2s 0.4s forwards;
+  }
+  .hero-img-wrap::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #2A1F14 0%, #1A1410 50%, #3D2B1A 100%);
+  }
+  .hero-img-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    z-index: 2;
+  }
+  .portrait-circle {
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, var(--gold) 0%, var(--rust) 100%);
+    opacity: 0.15;
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -60%);
+  }
+  .portrait-initials {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 8rem;
+    color: var(--cream);
+    opacity: 0.08;
+    letter-spacing: 0.1em;
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+  }
+  .hero-label {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 3rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--cream);
+    opacity: 0.4;
+    z-index: 3;
+    writing-mode: vertical-rl;
+  }
+
+  .scroll-indicator {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0;
+    animation: fadeIn 1s 1.5s forwards;
+    z-index: 10;
+  }
+  .scroll-line {
+    width: 1px; height: 50px;
+    background: linear-gradient(to bottom, var(--rust), transparent);
+    animation: scrollPulse 2s infinite;
+  }
+  .scroll-text {
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ── MARQUEE ── */
+  .marquee-section {
+    overflow: hidden;
+    border-top: 1px solid rgba(26,20,16,0.12);
+    border-bottom: 1px solid rgba(26,20,16,0.12);
+    padding: 1rem 0;
+    background: var(--ink);
+  }
+  .marquee-track {
+    display: flex;
+    gap: 3rem;
+    animation: marquee 20s linear infinite;
+    white-space: nowrap;
+  }
+  .marquee-item {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.15em;
+    color: var(--cream);
+    opacity: 0.5;
+    flex-shrink: 0;
+  }
+  .marquee-dot {
+    color: var(--rust);
+    opacity: 1 !important;
+  }
+
+  /* ── ABOUT ── */
+  #about {
+    padding: 8rem 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 6rem;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .about-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 1.5rem;
+  }
+  .about-heading {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    line-height: 1.15;
+    margin-bottom: 2rem;
+  }
+  .about-heading em { font-style: italic; color: var(--rust); }
+  .about-body {
+    font-size: 1rem;
+    line-height: 1.85;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+  .about-stats {
+    display: flex;
+    gap: 2.5rem;
+    margin-top: 2.5rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid rgba(26,20,16,0.12);
+  }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .stat-num span { color: var(--rust); }
+  .stat-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 0.3rem;
+  }
+
+  .about-visual {
+    position: relative;
+    height: 480px;
+  }
+  .about-card {
+    position: absolute;
+    background: var(--ink);
+    border-radius: 2px;
+  }
+  .about-card-1 {
+    width: 100%; height: 100%;
+    top: 0; left: 0;
+    background: linear-gradient(145deg, #2A1F14, #1A1410);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .about-card-1::before {
+    content: 'YOUR\APHOTO';
+    white-space: pre;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 5rem;
+    color: var(--cream);
+    opacity: 0.05;
+    text-align: center;
+    letter-spacing: 0.1em;
+    line-height: 1;
+  }
+  .about-accent {
+    position: absolute;
+    bottom: -1.5rem;
+    right: -1.5rem;
+    width: 120px; height: 120px;
+    background: var(--rust);
+    z-index: -1;
+  }
+  .about-accent-2 {
+    position: absolute;
+    top: -1rem;
+    left: -1rem;
+    width: 80px; height: 80px;
+    border: 2px solid var(--gold);
+    z-index: -1;
+  }
+  .skills-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 2rem;
+  }
+  .chip {
+    padding: 0.4rem 1rem;
+    border: 1px solid rgba(26,20,16,0.2);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    transition: all 0.2s;
+  }
+  .chip:hover {
+    border-color: var(--rust);
+    color: var(--rust);
+  }
+
+  /* ── WORK ── */
+  #work {
+    padding: 6rem 3rem;
+    background: var(--ink);
+    color: var(--cream);
+  }
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 4rem;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .section-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 0.8rem;
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 6vw, 5rem);
+    line-height: 1;
+    letter-spacing: 0.03em;
+  }
+  .section-link {
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cream);
+    text-decoration: none;
+    opacity: 0.5;
+    transition: opacity 0.2s, color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .section-link:hover { opacity: 1; color: var(--gold); }
+
+  .work-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: auto;
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .work-item {
+    position: relative;
+    overflow: hidden;
+    cursor: none;
+    background: #2A2118;
+  }
+  .work-item:nth-child(1) { grid-column: span 7; grid-row: span 1; aspect-ratio: 16/10; }
+  .work-item:nth-child(2) { grid-column: span 5; aspect-ratio: 4/5; }
+  .work-item:nth-child(3) { grid-column: span 5; aspect-ratio: 4/3; }
+  .work-item:nth-child(4) { grid-column: span 7; aspect-ratio: 16/9; }
+  .work-item:nth-child(5) { grid-column: span 4; aspect-ratio: 1; }
+  .work-item:nth-child(6) { grid-column: span 4; aspect-ratio: 1; }
+  .work-item:nth-child(7) { grid-column: span 4; aspect-ratio: 1; }
+
+  .work-bg {
+    position: absolute;
+    inset: 0;
+    transition: transform 0.6s ease;
+  }
+  .work-item:hover .work-bg { transform: scale(1.05); }
+
+  .work-bg-1 { background: linear-gradient(135deg, #3D2B1A 0%, #C84B2F 100%); }
+  .work-bg-2 { background: linear-gradient(135deg, #1A2A1A 0%, #2A5C2A 100%); }
+  .work-bg-3 { background: linear-gradient(135deg, #1A1A2A 0%, #2A2A5C 100%); }
+  .work-bg-4 { background: linear-gradient(135deg, #2A1A1A 0%, #5C2A2A 100%); }
+  .work-bg-5 { background: linear-gradient(135deg, #2A2A1A 0%, #5C5C1A 100%); }
+  .work-bg-6 { background: linear-gradient(135deg, #1A2A2A 0%, #1A5C5C 100%); }
+  .work-bg-7 { background: linear-gradient(135deg, #2A1A2A 0%, #5C1A5C 100%); }
+
+  .work-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.5rem, 3vw, 3rem);
+    color: rgba(245,240,232,0.06);
+    letter-spacing: 0.1em;
+    text-align: center;
+    padding: 1rem;
+  }
+
+  .work-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(26,20,16,0.95) 0%, rgba(26,20,16,0) 60%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.8rem;
+  }
+  .work-item:hover .work-overlay { opacity: 1; }
+  .work-cat {
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 0.4rem;
+  }
+  .work-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    color: var(--cream);
+    margin-bottom: 0.3rem;
+  }
+  .work-year {
+    font-size: 0.75rem;
+    color: rgba(245,240,232,0.4);
+    letter-spacing: 0.15em;
+  }
+
+  /* ── SERVICES ── */
+  #services {
+    padding: 8rem 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    margin-top: 4rem;
+    border: 1px solid rgba(26,20,16,0.12);
+  }
+  .service-card {
+    padding: 2.5rem;
+    border-right: 1px solid rgba(26,20,16,0.12);
+    border-bottom: 1px solid rgba(26,20,16,0.12);
+    transition: background 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .service-card:nth-child(3n) { border-right: none; }
+  .service-card:hover { background: var(--ink); color: var(--cream); }
+  .service-card:hover .service-num,
+  .service-card:hover .service-desc { color: rgba(245,240,232,0.5); }
+  .service-card:hover .service-name { color: var(--cream); }
+  .service-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.2em;
+    color: var(--rust);
+    margin-bottom: 1.5rem;
+    transition: color 0.3s;
+  }
+  .service-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    transition: color 0.3s;
+  }
+  .service-desc {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--muted);
+    transition: color 0.3s;
+  }
+
+  /* ── TESTIMONIAL / QUOTE ── */
+  .quote-section {
+    background: var(--rust);
+    padding: 6rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .quote-section::before {
+    content: '❝';
+    font-size: 20rem;
+    position: absolute;
+    top: -4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.06;
+    font-family: serif;
+    color: var(--cream);
+    line-height: 1;
+  }
+  .quote-text {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.8rem, 3.5vw, 3rem);
+    color: var(--cream);
+    line-height: 1.3;
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+  .quote-author {
+    margin-top: 2rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.6);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── CONTACT ── */
+  #contact {
+    padding: 8rem 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: start;
+  }
+  .contact-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3.5rem, 7vw, 6rem);
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    margin-bottom: 2rem;
+  }
+  .contact-heading em {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    color: var(--rust);
+  }
+  .contact-text {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--muted);
+    margin-bottom: 3rem;
+  }
+  .contact-links { display: flex; flex-direction: column; gap: 1.2rem; }
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    color: var(--ink);
+    font-size: 0.9rem;
+    transition: color 0.2s;
+  }
+  .contact-link:hover { color: var(--rust); }
+  .contact-icon {
+    width: 42px; height: 42px;
+    background: var(--ink);
+    color: var(--cream);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+  .contact-link:hover .contact-icon { background: var(--rust); }
+
+  .contact-form { padding-top: 1rem; }
+  .form-field { margin-bottom: 1.5rem; }
+  .form-field label {
+    display: block;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+  }
+  .form-field input,
+  .form-field textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(26,20,16,0.2);
+    padding: 0.8rem 0;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.3s;
+    resize: none;
+  }
+  .form-field input:focus,
+  .form-field textarea:focus { border-color: var(--rust); }
+  .form-field textarea { height: 100px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .btn-submit {
+    background: var(--ink);
+    color: var(--cream);
+    border: none;
+    padding: 1.1rem 2.5rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: none;
+    transition: background 0.3s, transform 0.2s;
+    margin-top: 0.5rem;
+  }
+  .btn-submit:hover { background: var(--rust); transform: translateY(-2px); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 2.5rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.08em;
+  }
+  .footer-copy {
+    font-size: 0.75rem;
+    color: rgba(245,240,232,0.35);
+    letter-spacing: 0.1em;
+  }
+  .footer-socials { display: flex; gap: 1.5rem; }
+  .footer-socials a {
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.4);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-socials a:hover { color: var(--rust); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.4; transform: scaleY(1); }
+    50% { opacity: 1; transform: scaleY(1.2); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    #hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    #about { grid-template-columns: 1fr; gap: 3rem; }
+    .about-visual { height: 300px; }
+    .services-grid { grid-template-columns: 1fr; }
+    .service-card { border-right: none; }
+    #contact { grid-template-columns: 1fr; gap: 3rem; }
+    .work-item:nth-child(1) { grid-column: span 12; }
+    .work-item:nth-child(2) { grid-column: span 6; }
+    .work-item:nth-child(3) { grid-column: span 6; }
+    .work-item:nth-child(4) { grid-column: span 12; }
+    .work-item:nth-child(5),
+    .work-item:nth-child(6),
+    .work-item:nth-child(7) { grid-column: span 4; }
+    nav { padding: 1.2rem 1.5rem; }
+    .nav-links { gap: 1.5rem; }
+    #hero, #about, #work, #services, #contact { padding-left: 1.5rem; padding-right: 1.5rem; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">YourName</a>
+  <ul class="nav-links">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-left">
+    <p class="hero-tag">Graphic Designer — Available for Freelance</p>
+    <h1 class="hero-title">
+      Design<br>that <em>Speaks</em><br>Volumes.
+    </h1>
+    <p class="hero-sub">
+      I craft visual identities, brand experiences, and design systems that help businesses make a lasting impression.
+    </p>
+    <div class="hero-cta">
+      <a href="#work" class="btn-primary">View My Work</a>
+      <a href="#contact" class="btn-ghost">Let's Collaborate <span>→</span></a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-img-wrap">
+      <div class="portrait-circle"></div>
+      <div class="portrait-initials">YN</div>
+      <span class="hero-label">Portfolio 2024</span>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <span class="scroll-text">Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <span class="marquee-item">Brand Identity</span>
+    <span class="marquee-item marquee-dot">✦</span>
+    <span class="marquee-item">Logo Design</span>
+    <span class="marquee-item marquee-dot">✦</span>
+    <span class="marquee-item">Packaging</span>
+    <span class="marquee-item marquee-dot">✦</span>
+    <span class="marquee-item">Print Design</span>
+    <span class="marquee-item marquee-dot">✦</span>
+    <span class="marquee-item">Social Media</span>
+    <span class="marquee-item marquee-dot">✦</span>
+    <span class="marquee-item">Illustration</span>
+    <span class="marquee-item marquee-dot">✦</span>
+    <span class="marquee-item">Typography</span>
+    <span class="marquee-item marquee-dot">✦</span>
+    <span class="marquee-item">Brand Identity</span>
+    <span class="marquee-item marquee-dot">✦</span>
+    <span class="marquee-item">Logo Design</span>
+    <span class="marquee-item marquee-dot">✦</span>
+    <span class="marquee-item">Packaging</span>
+    <span class="marquee-item marquee-dot">✦</span>
+    <span class="marquee-item">Print Design</span>
+    <span class="marquee-item marquee-dot">✦</span>
+    <span class="marquee-item">Social Media</span>
+    <span class="marquee-item marquee-dot">✦</span>
+    <span class="marquee-item">Illustration</span>
+    <span class="marquee-item marquee-dot">✦</span>
+    <span class="marquee-item">Typography</span>
+    <span class="marquee-item marquee-dot">✦</span>
+  </div>
+</div>
+
+<!-- WORK -->
+<section id="work">
+  <div class="section-header">
+    <div>
+      <p class="section-label">Selected Works</p>
+      <h2 class="section-title">Portfolio</h2>
+    </div>
+    <a href="#contact" class="section-link">Start a Project →</a>
+  </div>
+  <div class="work-grid">
+    <div class="work-item reveal">
+      <div class="work-bg work-bg-1"></div>
+      <div class="work-placeholder">ADD YOUR\ABEST WORK HERE</div>
+      <div class="work-overlay">
+        <p class="work-cat">Brand Identity</p>
+        <h3 class="work-title">Project Title One</h3>
+        <p class="work-year">2024</p>
+      </div>
+    </div>
+    <div class="work-item reveal">
+      <div class="work-bg work-bg-2"></div>
+      <div class="work-placeholder">YOUR PROJECT</div>
+      <div class="work-overlay">
+        <p class="work-cat">Logo Design</p>
+        <h3 class="work-title">Project Title Two</h3>
+        <p class="work-year">2024</p>
+      </div>
+    </div>
+    <div class="work-item reveal">
+      <div class="work-bg work-bg-3"></div>
+      <div class="work-placeholder">YOUR PROJECT</div>
+      <div class="work-overlay">
+        <p class="work-cat">Packaging</p>
+        <h3 class="work-title">Project Title Three</h3>
+        <p class="work-year">2024</p>
+      </div>
+    </div>
+    <div class="work-item reveal">
+      <div class="work-bg work-bg-4"></div>
+      <div class="work-placeholder">ADD YOUR WORK HERE</div>
+      <div class="work-overlay">
+        <p class="work-cat">Print Design</p>
+        <h3 class="work-title">Project Title Four</h3>
+        <p class="work-year">2024</p>
+      </div>
+    </div>
+    <div class="work-item reveal">
+      <div class="work-bg work-bg-5"></div>
+      <div class="work-placeholder">PROJECT</div>
+      <div class="work-overlay">
+        <p class="work-cat">Social</p>
+        <h3 class="work-title">Project Five</h3>
+        <p class="work-year">2024</p>
+      </div>
+    </div>
+    <div class="work-item reveal">
+      <div class="work-bg work-bg-6"></div>
+      <div class="work-placeholder">PROJECT</div>
+      <div class="work-overlay">
+        <p class="work-cat">Illustration</p>
+        <h3 class="work-title">Project Six</h3>
+        <p class="work-year">2024</p>
+      </div>
+    </div>
+    <div class="work-item reveal">
+      <div class="work-bg work-bg-7"></div>
+      <div class="work-placeholder">PROJECT</div>
+      <div class="work-overlay">
+        <p class="work-cat">Typography</p>
+        <h3 class="work-title">Project Seven</h3>
+        <p class="work-year">2024</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-visual reveal">
+    <div class="about-card about-card-1"></div>
+    <div class="about-accent"></div>
+    <div class="about-accent-2"></div>
+  </div>
+  <div>
+    <p class="about-label reveal">About Me</p>
+    <h2 class="about-heading reveal">A designer who <em>obsesses</em> over every pixel.</h2>
+    <p class="about-body reveal">
+      Hi, I'm [Your Name] — a passionate graphic designer with a keen eye for detail and a love for creating visual stories. I believe great design is not just about making things look beautiful, but about solving real problems and connecting with the right audience.
+    </p>
+    <p class="about-body reveal">
+      Currently taking on freelance projects. Whether you're a startup building a brand from scratch or an established business looking for a fresh perspective — I'd love to work with you.
+    </p>
+    <div class="skills-chips reveal">
+      <span class="chip">Adobe Illustrator</span>
+      <span class="chip">Photoshop</span>
+      <span class="chip">Figma</span>
+      <span class="chip">InDesign</span>
+      <span class="chip">Canva Pro</span>
+      <span class="chip">After Effects</span>
+    </div>
+    <div class="about-stats reveal">
+      <div>
+        <div class="stat-num">5<span>+</span></div>
+        <div class="stat-label">Projects Completed</div>
+      </div>
+      <div>
+        <div class="stat-num">3<span>+</span></div>
+        <div class="stat-label">Happy Clients</div>
+      </div>
+      <div>
+        <div class="stat-num">2<span>yr</span></div>
+        <div class="stat-label">Experience</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div style="max-width:1200px;margin:0 auto;">
+    <p class="section-label reveal">What I Do</p>
+    <h2 class="section-title reveal" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,6vw,5rem);">Services</h2>
+    <div class="services-grid reveal">
+      <div class="service-card">
+        <p class="service-num">01</p>
+        <h3 class="service-name">Brand Identity</h3>
+        <p class="service-desc">Logo design, color palettes, typography systems, and brand guidelines that make your business instantly recognizable.</p>
+      </div>
+      <div class="service-card">
+        <p class="service-num">02</p>
+        <h3 class="service-name">Print Design</h3>
+        <p class="service-desc">Business cards, brochures, flyers, posters, and all print collateral designed with precision and craft.</p>
+      </div>
+      <div class="service-card">
+        <p class="service-num">03</p>
+        <h3 class="service-name">Social Media</h3>
+        <p class="service-desc">Eye-catching templates, feed aesthetics, and campaign visuals that stop the scroll and build community.</p>
+      </div>
+      <div class="service-card">
+        <p class="service-num">04</p>
+        <h3 class="service-name">Packaging Design</h3>
+        <p class="service-desc">Product packaging that stands out on shelves and communicates your brand's story from the first glance.</p>
+      </div>
+      <div class="service-card">
+        <p class="service-num">05</p>
+        <h3 class="service-name">Illustration</h3>
+        <p class="service-desc">Custom illustrations, icons, and visual assets that add personality and depth to your brand communication.</p>
+      </div>
+      <div class="service-card">
+        <p class="service-num">06</p>
+        <h3 class="service-name">UI Design</h3>
+        <p class="service-desc">Clean, intuitive interfaces and visual design for websites and mobile apps that delight users.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<div class="quote-section reveal">
+  <blockquote class="quote-text">
+    "Design is not just what it looks like and feels like. Design is how it works."
+  </blockquote>
+  <p class="quote-author">— Steve Jobs</p>
+</div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div>
+    <h2 class="contact-heading reveal">Let's <em>Work</em><br>Together.</h2>
+    <p class="contact-text reveal">
+      Have a project in mind? I'm currently accepting new freelance clients. Let's create something great together.
+    </p>
+    <div class="contact-links reveal">
+      <a href="mailto:your@email.com" class="contact-link">
+        <div class="contact-icon">✉</div>
+        your@email.com
+      </a>
+      <a href="https://behance.net/yourprofile" class="contact-link" target="_blank">
+        <div class="contact-icon">Be</div>
+        Behance Portfolio
+      </a>
+      <a href="https://instagram.com/yourhandle" class="contact-link" target="_blank">
+        <div class="contact-icon">ig</div>
+        @yourinstagram
+      </a>
+    </div>
+  </div>
+  <div class="contact-form reveal">
+    <div class="form-row">
+      <div class="form-field">
+        <label>Your Name</label>
+        <input type="text" placeholder="Alex Johnson">
+      </div>
+      <div class="form-field">
+        <label>Email Address</label>
+        <input type="email" placeholder="alex@company.com">
+      </div>
+    </div>
+    <div class="form-field">
+      <label>Project Type</label>
+      <input type="text" placeholder="Brand Identity / Logo / Social Media...">
+    </div>
+    <div class="form-field">
+      <label>Tell Me About Your Project</label>
+      <textarea placeholder="I need a logo for my new coffee shop..."></textarea>
+    </div>
+    <button class="btn-submit" onclick="alert('Thanks! I\'ll be in touch soon.')">Send Message →</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">YourName</div>
+  <p class="footer-copy">© 2024 All Rights Reserved</p>
+  <div class="footer-socials">
+    <a href="#">Behance</a>
+    <a href="#">Instagram</a>
+    <a href="#">LinkedIn</a>
+  </div>
+</footer>
+
+<script>
+  // Custom Cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX; mouseY = e.clientY;
+    cursor.style.left = mouseX + 'px';
+    cursor.style.top = mouseY + 'px';
+  });
+
+  function animateRing() {
+    ringX += (mouseX - ringX) * 0.12;
+    ringY += (mouseY - ringY) * 0.12;
+    ring.style.left = ringX + 'px';
+    ring.style.top = ringY + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.transform = 'translate(-50%,-50%) scale(2)';
+      ring.style.transform = 'translate(-50%,-50%) scale(1.5)';
+      ring.style.opacity = '0.3';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+      ring.style.transform = 'translate(-50%,-50%) scale(1)';
+      ring.style.opacity = '0.6';
+    });
+  });
+
+  // Scroll Reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Duplicate marquee for seamless loop
+  const track = document.querySelector('.marquee-track');
+  track.innerHTML += track.innerHTML;
+</script>
+</body>
+</html>
